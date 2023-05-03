@@ -45,10 +45,6 @@ for np_val in np_vals:
     speedup_pool_single.append(avg_times_qusort / avg_times_qusort_pool)
     speedup_pool_multi.append(avg_times_qusort_multi / avg_times_qusort_pool)
 
-print(np_vals)
-print(np_vals)
-print(np_vals)
-
 # 画图
 fig, axs = plt.subplots(3, 1, figsize=(8, 8))
 axs[0].plot(np_vals, speedup_multi_single)
