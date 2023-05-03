@@ -1,8 +1,7 @@
 MPICC?=mpicc
 MPIRUN?=mpirun
 GCC?=gcc
-
-NP=20
+NP?=20
 
 PI_EXECUTABLE=pi
 MPI_EXECUTABLE=pi-mpi
