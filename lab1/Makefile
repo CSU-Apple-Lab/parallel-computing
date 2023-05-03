@@ -14,7 +14,7 @@ OUTPUT_FILES=$(QUSORT_OUTPUT) $(QUSORT_MULTI_OUTPUT) $(QUSORT_POOL_OUTPUT)
 
 .PHONY: all
 
-all: build run clean
+all: build run generate clean
 
 
 build: qusort.c qusort_multi.c qusort_pool.c

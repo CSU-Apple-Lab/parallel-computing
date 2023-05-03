@@ -34,28 +34,34 @@ for line in qusort_pool_lines:
 
 # 计算每个NP的平均Time和加速比
 np_vals = sorted(list(qusort_data.keys()))
-speedup_multi = []
-speedup_pool = []
+speedup_multi_single = []
+speedup_pool_single = []
+speedup_pool_multi = []
 for np_val in np_vals:
     avg_times_qusort = sum(qusort_data[np_val]) / COUNT
     avg_times_qusort_multi = sum(qusort_multi_data[np_val]) / COUNT
     avg_times_qusort_pool = sum(qusort_pool_data[np_val]) / COUNT
-    speedup_multi.append(avg_times_qusort / avg_times_qusort_multi)
-    speedup_pool.append(avg_times_qusort / avg_times_qusort_pool)
+    speedup_multi_single.append(avg_times_qusort / avg_times_qusort_multi)
+    speedup_pool_single.append(avg_times_qusort / avg_times_qusort_pool)
+    speedup_pool_multi.append(avg_times_qusort_multi / avg_times_qusort_pool)
 
 print(np_vals)
 print(np_vals)
 print(np_vals)
 
 # 画图
-fig, axs = plt.subplots(2, 1, figsize=(8, 8))
-axs[0].plot(np_vals, speedup_multi)
+fig, axs = plt.subplots(3, 1, figsize=(8, 8))
+axs[0].plot(np_vals, speedup_multi_single)
 axs[0].set_xlabel('Numbers')
 axs[0].set_ylabel('Speedup(Multi Thread/Single Thread)')
 
-axs[1].plot(np_vals, speedup_pool)
+axs[1].plot(np_vals, speedup_pool_single)
 axs[1].set_xlabel('Numbers')
 axs[1].set_ylabel('Speedup(Thread Pool/Single Thread)')
+
+axs[2].plot(np_vals, speedup_pool_multi)
+axs[2].set_xlabel('Numbers')
+axs[2].set_ylabel('Speedup(Thread Pool/Multi Thread)')
 
 plt.tight_layout()
 plt.show()
