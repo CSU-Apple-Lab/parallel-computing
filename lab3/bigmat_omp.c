@@ -10,6 +10,7 @@ int A[N][N], B[N][N];
 void matrixMultiply()
 {
     int C[N][N];
+#pragma omp parallel for
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
     elapsedTime -= omp_get_wtime();
     matrixMultiply();
     elapsedTime += omp_get_wtime();
-    printf("Multiply %dx%d matrix...\nNP=%d Time=%.6lf", N, N, NP, elapsedTime);
+    printf("%.6lfs\n", elapsedTime);
 
     return 0;
 }

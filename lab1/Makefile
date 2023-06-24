@@ -19,15 +19,12 @@ all: build run generate clean
 
 build: qusort.c qusort_multi.c qusort_pool.c
 	@echo "qusort: start building"
-	@$(GCC) -c qusort.c
-	@$(GCC) -o qusort qusort.o
-	@$(GCC) -c qusort_multi.c
-	@$(GCC) -o qusort_multi qusort_multi.o
-	@$(GCC) -c qusort_pool.c
-	@$(GCC) -o qusort_pool qusort_pool.o
+	@$(GCC) -o qusort qusort.c
+	@$(GCC) -o qusort_multi qusort_multi.c
+	@$(GCC) -o qusort_pool qusort_pool.c
 	@echo "qusort: end building"
 
-run:
+run: $(EXEC_FILES)
 	@echo "qusort: start running"
 	@$(call run,$(QUSORT_EXECUTABLE),$(QUSORT_OUTPUT))
 	@$(call run,$(QUSORT_MULTI_EXECUTABLE),$(QUSORT_MULTI_OUTPUT))
@@ -44,13 +41,19 @@ clean:
 	@-rm *.o $(EXEC_FILES) $(OUTPUT_FILES)
 
 define run
-	for i in $N; do \
-        times=(); \
-        for j in $$(seq 1 10); do \
-            result=$$(./$(1) $$i); \
-            time=$$(echo $$result | awk '{print $$NF}' | awk -F 's' '{print $$1}'); \
-            times+=($$time); \
-        done; \
-		echo "N=$$i Time=$${times[@]}" >> $(2); \
-    done
+
+for i in $N ; do \
+	times=(); \
+	echo $$i; \
+done
+
+for i in $N; do \
+	times=(); \
+	for j in 1..0; do \
+		result=$(./$(1) $i); \
+		time=$(echo $result | awk '{print $NF}' | awk -F 's' '{print $1}'); \
+		times+=($time); \
+	done; \
+	echo "N=$i Time=${times[@]}" >> $(2); \
+done
 endef
