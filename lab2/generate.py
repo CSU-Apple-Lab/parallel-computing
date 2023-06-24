@@ -1,5 +1,4 @@
 import re
-import numpy as np
 import matplotlib.pyplot as plt
 
 COUNT = 10
@@ -24,6 +23,7 @@ for line in pi_mpi_lines:
 # 计算每个NP的平均Time和加速比
 np_vals = sorted(list(pi_mpi_data.keys()))
 speedup = []
+
 for np_val in np_vals:
     avg_time_pi_mpi = sum(pi_mpi_data[np_val]) / COUNT
     speedup.append(avg_time_pi / avg_time_pi_mpi)

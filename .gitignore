@@ -1,5 +1,6 @@
-# ignore VSCode Configuration
+# ignore IDE
 /.vscode
+/.idea
 
 # ignore build files
 *.dSYM

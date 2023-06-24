@@ -16,7 +16,6 @@ OUTPUT_FILES=$(QUSORT_OUTPUT) $(QUSORT_MULTI_OUTPUT) $(QUSORT_POOL_OUTPUT)
 
 all: build run generate clean
 
-
 build: qusort.c qusort_multi.c qusort_pool.c
 	@echo "qusort: start building"
 	@$(GCC) -o qusort qusort.c
@@ -38,22 +37,16 @@ generate: generate.py
 
 clean:
 	@echo "sys: remove build files"
-	@-rm *.o $(EXEC_FILES) $(OUTPUT_FILES)
+	@-rm $(EXEC_FILES) $(OUTPUT_FILES)
 
 define run
-
-for i in $N ; do \
-	times=(); \
-	echo $$i; \
-done
-
 for i in $N; do \
-	times=(); \
-	for j in 1..0; do \
-		result=$(./$(1) $i); \
-		time=$(echo $result | awk '{print $NF}' | awk -F 's' '{print $1}'); \
-		times+=($time); \
+	times=;\
+	for j in $$(seq 1 10); do \
+		result=$$(./$(1) $$i); \
+		time=$$(echo $$result | awk '{print $$NF}' | awk -F 's' '{print $$1}'); \
+		times=$(join $$times, $$time); \
 	done; \
-	echo "N=$i Time=${times[@]}" >> $(2); \
+	echo "N=$$i Time=$$times" >> $(2); \
 done
 endef

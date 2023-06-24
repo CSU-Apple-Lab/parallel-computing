@@ -1,7 +1,7 @@
 MPICC?=mpicc
 MPIRUN?=mpirun
 GCC?=gcc
-NP?=20
+NP?=16
 
 PI_EXECUTABLE=pi
 MPI_EXECUTABLE=pi-mpi
@@ -19,8 +19,7 @@ all: build run generate clean
 
 build: pi.c pi-mpi.c
 	@echo "pi & pi_mpi: start building"
-	@$(GCC) -c pi.c
-	@$(GCC) -o pi pi.o
+	@$(GCC) -o pi pi.c
 	@$(MPICC) -o pi-mpi pi-mpi.c
 	@echo "pi & pi_mpi: end building"
 
@@ -38,20 +37,20 @@ generate: generate.py
 clean:
 	@echo "sys: remove build files"
 	@-rm -rf *.dSYM
-	@-rm *.o $(EXEC_FILES) $(OUTPUT_FILES)
+	@-rm $(EXEC_FILES) $(OUTPUT_FILES)
 
 define run
-	for i in $$(seq 1 $(1)); do \
-        times=(); \
-        for j in $$(seq 1 10); do \
-			if [ "$(2)" = "pi" ]; then \
-                result=$$(./$(PI_EXECUTABLE)); \
-            else \
-                result=$$(mpirun -np $$i ./$(MPI_EXECUTABLE)); \
-            fi; \
-            time=$$(echo $$result | awk -F ' ' '{print $$2}' | awk -F '=' '{gsub(/s/, "", $$2); print $$2}' ); \
-            times+=($$time); \
-        done; \
-		echo "NP=$$i Time=$${times[@]}" >> $(3); \
-    done
+for i in $$(seq 1 $(1)); do \
+	times=; \
+	for j in $$(seq 1 10); do \
+		if [ "$(2)" = "pi" ]; then \
+			result=$$(./$(PI_EXECUTABLE)); \
+		else \
+			result=$$(mpirun -np $$i ./$(MPI_EXECUTABLE)); \
+		fi; \
+		time=$$(echo $$result | awk -F ' ' '{print $$2}' | awk -F '=' '{gsub(/s/, "", $$2); print $$2}' ); \
+		times=$(join $$times, $$time); \
+	done; \
+	echo "NP=$$i Time=$$times" >> $(3); \
+done
 endef
